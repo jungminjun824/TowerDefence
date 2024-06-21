@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngineInternal;
 
 public enum WeaponState { SearchTarget = 0, AttackToTarget }
 public class TowerWeapon : MonoBehaviour
@@ -11,6 +8,7 @@ public class TowerWeapon : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private float attackRate = 0.5f;
     [SerializeField] private float attackRange = 2.0f;
+    [SerializeField] private int attackDamage = 1;
 
     private WeaponState weaponState = WeaponState.SearchTarget;
     private Transform attackTarget = null;
@@ -94,6 +92,6 @@ public class TowerWeapon : MonoBehaviour
     private void SpawnProjectile()
     {
         GameObject clone = Instantiate(projectilePrefab, spawnPoint.position, Quaternion.identity);
-        clone.GetComponent<Projectile>().SetUp(attackTarget);
+        clone.GetComponent<Projectile>().SetUp(attackTarget, attackDamage);
     }   
 }

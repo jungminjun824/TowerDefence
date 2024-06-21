@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
+
+public enum EnemyDestroyType { Kill = 0, Arrive}
 
 public class Enemy : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private int currentIndex = 0;
     private Movement2D movement2D;
     private EnemySpawner enemySpawner;
+    [SerializeField] private int gold = 10;
 
     public void Setup(EnemySpawner enemySpawner, Transform[] wayPoints)
     {
@@ -51,11 +52,12 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Ondie();
+            gold = 0;
+            Ondie(EnemyDestroyType.Arrive);
         }
     }
-    public void Ondie()
+    public void Ondie(EnemyDestroyType type)
     {
-        enemySpawner.DestroyEnemy(this);
+        enemySpawner.DestroyEnemy(type, this, gold);
     }
 }

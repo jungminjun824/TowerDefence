@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1850639671273429519}
   - component: {fileID: 6443496872082150973}
   - component: {fileID: 7994200454522089590}
+  - component: {fileID: -3579830419437671595}
   m_Layer: 0
   m_Name: Enemy01
   m_TagString: Enemy
@@ -99,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf068133afbe5d44db35d35d793cddb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 5
   moveDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &6443496872082150973
 MonoBehaviour:
@@ -148,3 +149,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &-3579830419437671595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7837540587175986142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19235e41cffcdbe4da49b6d7560bff78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 5

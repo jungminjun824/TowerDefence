@@ -133,3 +133,4 @@ MonoBehaviour:
   spawnPoint: {fileID: 6205702260513986065}
   attackRate: 0.5
   attackRange: 2
+  attackDamage: 1
