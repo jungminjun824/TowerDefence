@@ -3824,6 +3824,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1186761670}
   - component: {fileID: 1186761669}
+  - component: {fileID: 1186761671}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -3843,10 +3844,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3318ddf8a42c504fad1ecb61ba56f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7837540587175986142, guid: c3c7ea7551aa58841bbc989ae13553ae, type: 3}
   enemyHPSliderPrefab: {fileID: 4827946232945431778, guid: 734295e76a2c8bb468b0fa2bb8258dfd, type: 3}
   canvasTransform: {fileID: 355793960}
-  spawnTime: 0.5
   wayPoints:
   - {fileID: 235421}
   - {fileID: 380757266}
@@ -3879,6 +3878,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1186761671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186761668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce653e6e8ec9f5a4da107d08026a9921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waves:
+  - spawnTime: 0.5
+    maxEnemyCount: 10
+    enemyPrefabs:
+    - {fileID: 7837540587175986142, guid: c3c7ea7551aa58841bbc989ae13553ae, type: 3}
+  - spawnTime: 0.5
+    maxEnemyCount: 20
+    enemyPrefabs:
+    - {fileID: 7837540587175986142, guid: 756844d67111f7a4aab3fd6329180bea, type: 3}
+  enemySpawner: {fileID: 1186761669}
 --- !u!4 &1199323198 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7068201245231998721, guid: 47cf637d6435cf44298d61d071bb50b3, type: 3}
@@ -6371,7 +6392,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textPlayerHP: {fileID: 1414188969}
+  textPlayerGold: {fileID: 501657072}
   playerHP: {fileID: 1849448172}
+  playerGold: {fileID: 1849448174}
 --- !u!114 &1762299674
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,12 +15,14 @@ public class TowerSpawner : MonoBehaviour
         {
             return;
         }
+
         Tile tile = tileTransform.GetComponent<Tile>();
 
         if(tile.IsBuildTower == true )
         {
             return;
         }
+
         tile.IsBuildTower = true;
         playerGold.CurrentGold -= towerBuilGold;
         GameObject clone = Instantiate(towerPrefab, tileTransform.position, Quaternion.identity);

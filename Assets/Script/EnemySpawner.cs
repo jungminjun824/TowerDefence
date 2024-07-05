@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
+    //[SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject enemyHPSliderPrefab;
     [SerializeField] private Transform canvasTransform;
-    [SerializeField] private float spawnTime;
+    //[SerializeField] private float spawnTime;
     [SerializeField] private Transform[] wayPoints;
     [SerializeField] private PlayerHP playerHP;
     [SerializeField] private PlayerGold playerGold;
+    private Wave currentWave;
     private List<Enemy> enemyList;
 
     public List<Enemy> EnemyList => enemyList;
@@ -18,14 +19,23 @@ public class EnemySpawner : MonoBehaviour
     private void Awake()
     {
         enemyList = new List<Enemy>();
+        //StartCoroutine("SpawnEnemy");
+    }
+
+    public void StartWave(Wave wave)
+    {
+        currentWave = wave;
         StartCoroutine("SpawnEnemy");
     }
 
     private IEnumerator SpawnEnemy()
     {
-        while (true)
+        int spawnEnemyCount = 0;
+
+        while (spawnEnemyCount < currentWave.maxEnemyCount)
         {
-            GameObject clone = Instantiate(enemyPrefab);
+            int enemyIndex = Random.Range(0, currentWave.enemyPrefabs.Length);
+            GameObject clone = Instantiate(currentWave.enemyPrefabs[enemyIndex]);
             Enemy enemy = clone.GetComponent<Enemy>();
 
             enemy.Setup(this, wayPoints);
@@ -33,7 +43,9 @@ public class EnemySpawner : MonoBehaviour
 
             SpawnEnemyHPSlider(clone);
 
-            yield return new WaitForSeconds(spawnTime);
+            spawnEnemyCount++;
+
+            yield return new WaitForSeconds(currentWave.spawnTime);
         }
     }
     public void DestroyEnemy(EnemyDestroyType type, Enemy enemy, int gold)
@@ -42,6 +54,7 @@ public class EnemySpawner : MonoBehaviour
         {
             playerHP.TakeDamage(1);
         }
+
         else if (type == EnemyDestroyType.Kill)
         {
             playerGold.CurrentGold += gold;
