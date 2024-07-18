@@ -13,19 +13,23 @@ MonoBehaviour:
   m_Name: Tower01Cannon
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 6136711392113450107, guid: d7ed2a85723f59549be6243fd3d494eb, type: 3}
+  followTowerPrefab: {fileID: 2490746504152160270, guid: fae84c917846b3a48a4aaec23058a002, type: 3}
   weapon:
   - sprite: {fileID: 21300000, guid: d0832de5850afd84eaacfa2ca8b10287, type: 3}
     damage: 1
     rate: 0.5
     range: 2
     cost: 50
+    sell: 25
   - sprite: {fileID: 21300000, guid: 7c1b05f0950813f40a9b58b22bb2217d, type: 3}
     damage: 1.5
     rate: 0.4
     range: 2.3
     cost: 100
+    sell: 75
   - sprite: {fileID: 21300000, guid: fc5c0cafaea108b458ff1ad88e3ba746, type: 3}
     damage: 2
     rate: 0.3
     range: 2.5
     cost: 150
+    sell: 150
