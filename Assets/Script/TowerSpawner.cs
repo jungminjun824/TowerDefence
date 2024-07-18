@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class TowerSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject towerPrefab;
-    [SerializeField] private int towerBuilGold = 50;
+    [SerializeField] private TowerTemplate towerTemplate;
+
     [SerializeField] private EnemySpawner enemySpawner; //현재 맴에 존재하는 적 리스트 정보를 얻기 위해
     [SerializeField] private PlayerGold playerGold;
+    [SerializeField] private SystemTextViewer systemTextViewer;
 
     public void SpawnTower(Transform tileTransform)
     {
-        if(towerBuilGold > playerGold.CurrentGold)
+        if (towerTemplate.weapon[0].cost > playerGold.CurrentGold)
         {
+            systemTextViewer.PrintText(SystemType.Money);
             return;
         }
 
@@ -20,16 +22,17 @@ public class TowerSpawner : MonoBehaviour
 
         if(tile.IsBuildTower == true )
         {
+            systemTextViewer.PrintText(SystemType.Build);
             return;
         }
 
         tile.IsBuildTower = true;
 
-        playerGold.CurrentGold -= towerBuilGold;
+        playerGold.CurrentGold -= towerTemplate.weapon[0].cost;
 
         Vector3 position = tileTransform.position + Vector3.back;
-        GameObject clone = Instantiate(towerPrefab, position, Quaternion.identity);
+        GameObject clone = Instantiate(towerTemplate.towerPrefab, position, Quaternion.identity); 
 
-        clone.GetComponent<TowerWeapon>().SetUp(enemySpawner);
+        clone.GetComponent<TowerWeapon>().SetUp(enemySpawner, playerGold, tile);
     }
 }
