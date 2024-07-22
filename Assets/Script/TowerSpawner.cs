@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerSpawner : MonoBehaviour
@@ -27,6 +26,7 @@ public class TowerSpawner : MonoBehaviour
 
         isOnTowerButton = true;
         followTowerClone = Instantiate(towerTemplate.followTowerPrefab);
+        StartCoroutine("OnTowerCanCelSystem");
     }
 
     public void SpawnTower(Transform tileTransform)
@@ -38,12 +38,6 @@ public class TowerSpawner : MonoBehaviour
         }
 
         Tile tile = tileTransform.GetComponent<Tile>();
-
-        if(tile.IsBuildTower == true )
-        {
-            systemTextViewer.PrintText(SystemType.Build);
-            return;
-        }
 
         isOnTowerButton = false;
 
@@ -57,5 +51,21 @@ public class TowerSpawner : MonoBehaviour
         clone.GetComponent<TowerWeapon>().SetUp(enemySpawner, playerGold, tile);
 
         Destroy(followTowerClone);
+
+        StopCoroutine("OnTowerCanCelSystem");
+    }
+    IEnumerator OnTowerCanCelSystem()
+    {
+        while (true)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
+            {
+                isOnTowerButton = false;
+                Destroy(followTowerClone);
+                break;
+            }
+
+            yield return null;
+        }
     }
 }
