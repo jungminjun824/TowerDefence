@@ -1,15 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-public enum WeaponState { SearchTarget = 0, AttackToTarget }
+
+public enum WeaponType { Cannon = 0, }
+public enum WeaponState { SearchTarget = 0, TryAttackCannon, }
 public class TowerWeapon : MonoBehaviour
 {
+    [Header("Cammons")]
     [SerializeField] private TowerTemplate towerTemplate;
-    [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private WeaponType weaponType;
+
+    [Header("Cannon")]
+    [SerializeField] private GameObject projectilePrefab;
 
     private int level = 0;
-
     private WeaponState weaponState = WeaponState.SearchTarget;
     private Transform attackTarget = null;
     private SpriteRenderer spriteRenderer;
@@ -59,51 +64,62 @@ public class TowerWeapon : MonoBehaviour
         float degree = Mathf.Atan2(dy, dx) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, degree);
     }
-
-    private IEnumerator SearchTarget()
+    private IEnumerator SerchTarget()
     {
         while (true)
         {
-            float closestDistSqr = Mathf.Infinity;
+            attackTarget = FindClosesAttackTarget();
 
-            for (int i = 0; i < enemySpawner.EnemyList.Count; ++i)
-            {
-                float distance = Vector3.Distance(enemySpawner.EnemyList[i].transform.position, transform.position);
-                //if (distance <= attackRange && distance <= closestDistSqr)
-                if(distance <= towerTemplate.weapon[level].range && distance <= closestDistSqr)
-                {
-                    closestDistSqr = distance;
-                    attackTarget = enemySpawner.EnemyList[i].transform;
-                }
-            }
             if (attackTarget != null)
             {
-                ChangeState(WeaponState.AttackToTarget);
+                ChangeState(WeaponState.TryAttackCannon);
             }
             yield return null;
         }
     }
-    private IEnumerator AttackToTarget()
+    private IEnumerator TryAttackCannon()
     {
         while (true)
         {
-            if (attackTarget == null)
+            if(IsPossibleToAttackTarget() == false)
             {
-                ChangeState(WeaponState.SearchTarget);
-                break;
-            }
-            float distance = Vector3.Distance(attackTarget.position, transform.position);
-            //if (distance > attackRange)
-            if (distance > towerTemplate.weapon[level].range)
-            {
-                attackTarget = null;
                 ChangeState(WeaponState.SearchTarget);
                 break;
             }
             yield return new WaitForSeconds(towerTemplate.weapon[level].rate);
-
-            SpawnProjectile();
         }
+    }
+    private Transform FindClosesAttackTarget()
+    {
+        float closestDistSqr = Mathf.Infinity;
+
+        for (int i = 0; i < enemySpawner.EnemyList.Count; ++i)
+        {
+            float distance = Vector3.Distance(enemySpawner.EnemyList[i].transform.position, transform.position);
+            //if (distance <= attackRange && distance <= closestDistSqr)
+            if (distance <= towerTemplate.weapon[level].range && distance <= closestDistSqr)
+            {
+                closestDistSqr = distance;
+                attackTarget = enemySpawner.EnemyList[i].transform;
+            }
+        }
+
+        return attackTarget;
+    }
+    private bool IsPossibleToAttackTarget()
+    {
+        if (attackTarget == null)
+        {
+            return false;
+        }
+        float distance = Vector3.Distance(attackTarget.position, transform.position);
+        if (distance > towerTemplate.weapon[level].range)
+        {
+            attackTarget = null;
+            return false;
+        }
+
+        return true;
     }
     private void SpawnProjectile()
     {
@@ -112,7 +128,7 @@ public class TowerWeapon : MonoBehaviour
     }
     public bool Upgrade()
     {
-        if(playerGold.CurrentGold < towerTemplate.weapon[level+1].cost)
+        if (playerGold.CurrentGold < towerTemplate.weapon[level + 1].cost)
         {
             return false;
         }

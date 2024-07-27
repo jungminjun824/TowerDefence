@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class TowerSpawner : MonoBehaviour
 {
-    [SerializeField] private TowerTemplate towerTemplate;
-
+    [SerializeField] private TowerTemplate[] towerTemplate;
     [SerializeField] private EnemySpawner enemySpawner; //현재 맴에 존재하는 적 리스트 정보를 얻기 위해
     [SerializeField] private PlayerGold playerGold;
     [SerializeField] private SystemTextViewer systemTextViewer;
