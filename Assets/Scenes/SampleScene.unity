@@ -2271,11 +2271,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1244577657}
         m_TargetAssemblyTypeName: TowerSpawner, Assembly-CSharp
         m_MethodName: ReadyToSpawnTower
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3974,7 +3974,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1244577657}
         m_TargetAssemblyTypeName: TowerSpawner, Assembly-CSharp
         m_MethodName: ReadyToSpawnTower
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6055,7 +6055,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086043d9446a0604099f0dee2d3f7ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerTemplate: {fileID: 11400000, guid: 432a88fcd2ae2894c8e034d3c98bd209, type: 2}
+  towerTemplate:
+  - {fileID: 11400000, guid: 432a88fcd2ae2894c8e034d3c98bd209, type: 2}
+  - {fileID: 11400000, guid: 93730379b1c52b445a6f2bbfc483e3e6, type: 2}
   enemySpawner: {fileID: 1186761669}
   playerGold: {fileID: 1849448174}
   systemTextViewer: {fileID: 974156396}
@@ -9302,7 +9304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96744b79355e0784990a5bc88a82486f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGold: 100
+  currentGold: 5000
 --- !u!1001 &1858073675
 PrefabInstance:
   m_ObjectHideFlags: 0

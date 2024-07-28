@@ -2,8 +2,8 @@ using System.Collections;
 using UnityEngine;
 
 
-public enum WeaponType { Cannon = 0, }
-public enum WeaponState { SearchTarget = 0, TryAttackCannon, }
+public enum WeaponType { Cannon = 0, Laser }
+public enum WeaponState { SearchTarget = 0, TryAttackCannon, TryAttackLaser, }
 public class TowerWeapon : MonoBehaviour
 {
     [Header("Cammons")]
@@ -13,6 +13,11 @@ public class TowerWeapon : MonoBehaviour
 
     [Header("Cannon")]
     [SerializeField] private GameObject projectilePrefab;
+
+    [Header("Laser")]
+    [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Transform hitEffect;
+    [SerializeField] LayerMask targetLaser;
 
     private int level = 0;
     private WeaponState weaponState = WeaponState.SearchTarget;
@@ -72,8 +77,16 @@ public class TowerWeapon : MonoBehaviour
 
             if (attackTarget != null)
             {
-                ChangeState(WeaponState.TryAttackCannon);
+                if (weaponType == WeaponType.Cannon)
+                {
+                    ChangeState(WeaponState.TryAttackCannon);
+                }
+                else if (weaponType == WeaponType.Laser)
+                {
+                    ChangeState(WeaponState.TryAttackLaser);
+                }
             }
+
             yield return null;
         }
     }
@@ -81,12 +94,30 @@ public class TowerWeapon : MonoBehaviour
     {
         while (true)
         {
-            if(IsPossibleToAttackTarget() == false)
+            if (IsPossibleToAttackTarget() == false)
             {
                 ChangeState(WeaponState.SearchTarget);
                 break;
             }
             yield return new WaitForSeconds(towerTemplate.weapon[level].rate);
+        }
+    }
+    private IEnumerator TryAttackLaser()
+    {
+        EnableLaser();
+
+        while (true)
+        {
+            if(IsPossibleToAttackTarget() == false)
+            {
+                DisableLaser();
+                ChangeState(WeaponState.SearchTarget);
+                break;
+            }
+
+            SpawnLaser();
+
+            yield return null;
         }
     }
     private Transform FindClosesAttackTarget()
@@ -126,6 +157,33 @@ public class TowerWeapon : MonoBehaviour
         GameObject clone = Instantiate(projectilePrefab, spawnPoint.position, Quaternion.identity);
         clone.GetComponent<Projectile>().SetUp(attackTarget, towerTemplate.weapon[level].damage);
     }
+    private void EnableLaser()
+    {
+        lineRenderer.gameObject.SetActive(true);
+        hitEffect.gameObject.SetActive(true);
+    }
+    private void DisableLaser()
+    {
+        lineRenderer.gameObject.SetActive(false);
+        hitEffect.gameObject.SetActive(false);
+    }
+    private void SpawnLaser()
+    {
+        Vector3 direction = attackTarget.position - spawnPoint.position;
+        RaycastHit2D[] hit = Physics2D.RaycastAll(spawnPoint.position, direction,
+                                                  towerTemplate.weapon[level].range, targetLaser);
+
+        for(int i = 0; i < hit.Length; ++i)
+        {
+            if (hit[i].transform == attackTarget)
+            {
+                lineRenderer.SetPosition(0, spawnPoint.position);
+                lineRenderer.SetPosition(1, new Vector3(hit[i].point.x, hit[i].point.y, 0) + Vector3.back);
+                hitEffect.position = hit[i].point;
+                attackTarget.GetComponent<EnemyHP>().TakeDamage(towerTemplate.weapon[level].damage * Time.deltaTime);
+            }
+        }
+    }
     public bool Upgrade()
     {
         if (playerGold.CurrentGold < towerTemplate.weapon[level + 1].cost)
@@ -136,6 +194,12 @@ public class TowerWeapon : MonoBehaviour
         level++;
         spriteRenderer.sprite = towerTemplate.weapon[level].sprite;
         playerGold.CurrentGold -= towerTemplate.weapon[level].cost;
+
+        if(weaponType == WeaponType.Laser)
+        {
+            lineRenderer.startWidth = 0.05f + level * 0.05f;
+            lineRenderer.endWidth = 0.05f;
+        }
 
         return true;
     }
